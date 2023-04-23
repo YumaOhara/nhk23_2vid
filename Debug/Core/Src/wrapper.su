@@ -1,0 +1,6 @@
+wrapper.cpp:45:6:void bldc_update()	16	static
+wrapper.cpp:60:6:void wheel1()	4	static
+wrapper.cpp:72:6:void wheel2()	4	static
+wrapper.cpp:84:6:void wheel3()	4	static
+wrapper.cpp:96:6:void wheel4()	4	static
+wrapper.cpp:108:6:void main_cpp()	8	static
