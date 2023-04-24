@@ -39,8 +39,9 @@ int32_t V1 = 0;
 int32_t V2 = 0;
 int32_t V3 = 0;
 int32_t V4 = 0;
+
 // タイマ用構造体変数
-TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim1;
 
 void bldc_update(){
 	Vx = (LeftAxisX - 64)*250/64+708;
@@ -59,7 +60,7 @@ void bldc_update(){
 
 void wheel1(){
 	if(V1 >= 1000){
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 999);
+		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 990);
 	}
 	if(V1 <= 499){
 		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 417);
@@ -71,7 +72,7 @@ void wheel1(){
 
 void wheel2(){
 	if(V2 >= 1000){
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 999);
+		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 990);
 	}
 	if(V2 <= 499){
 		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 417);
@@ -83,7 +84,7 @@ void wheel2(){
 
 void wheel3(){
 	if(V3 >= 1000){
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 999);
+		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 990);
 	}
 	if(V3 <= 499){
 		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 417);
@@ -95,7 +96,7 @@ void wheel3(){
 
 void wheel4(){
 	if(V4 >= 1000){
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 999);
+		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 990);
 	}
 	if(V4 <= 499){
 		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 417);
@@ -117,11 +118,16 @@ void main_cpp(void)
 	HAL_GPIO_WritePin(GPIOC, YELLOW_LED_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOC, RED_LED_Pin, GPIO_PIN_SET);
 
+	HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+	HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
+	HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_4);
+
+	//エアシリoff
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+
 	while(1){
-		HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
-		HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
-		HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
-		HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_4);
 
 		//パルス幅max
 		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 999);
@@ -129,7 +135,7 @@ void main_cpp(void)
 		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 999);
 		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 999);
 
-		if(A == 1){
+		if(UP == 1){
 			//電源付けてから3sec以内にAを押す
 			break;
 		}
@@ -180,6 +186,11 @@ void main_cpp(void)
 			HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_3);
 			HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_4);
 
+			//エアシリoff
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
+
+
 
 		}
 
@@ -223,20 +234,55 @@ void main_cpp(void)
 			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 850);
 		}
 
-		//初期化ダンス用？？？？
-		if(L2 == 1){
-			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 417);
-			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 417);
-			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 417);
-			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 417);
+		//初期化失敗時のタイヤ個別駆動
+//		if(UP == 1){
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 999);
+//			HAL_Delay(1000);
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 417);
+//			HAL_Delay(10);
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 708);
+//		}
+//
+//		if(RIGHT == 1){
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 999);
+//			HAL_Delay(1000);
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 417);
+//			HAL_Delay(10);
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 708);
+//		}
+//
+//		if(DOWN == 1){
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 999);
+//			HAL_Delay(1000);
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 417);
+//			HAL_Delay(10);
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 708);
+//		}
+//
+//		if(LEFT == 1){
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 999);
+//			HAL_Delay(1000);
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 417);
+//			HAL_Delay(10);
+//			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 708);
+//		}
+
+		if(B == 1){
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
 		}
 
-		if(R2 == 1){
-			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 999);
-			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 999);
-			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 999);
-			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 999);
+		if(Y == 1){
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
 		}
+
+		if(X == 1){
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+		}
+
+		if(A == 1){
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+		}
+
 
 	}
 }
