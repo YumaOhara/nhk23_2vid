@@ -1,4 +1,5 @@
-Core/Src/UART1_F710.o: ../Core/Src/UART1_F710.cpp ../Core/Inc/main.h \
+Core/Src/UART1_F710.o: ../Core/Src/UART1_F710.cpp ../Core/Inc/usart.h \
+ ../Core/Inc/main.h \
  C:/Users/schne/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  C:/Users/schne/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -24,6 +25,8 @@ Core/Src/UART1_F710.o: ../Core/Src/UART1_F710.cpp ../Core/Inc/main.h \
  C:/Users/schne/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h \
  C:/Users/schne/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
  C:/Users/schne/STM32Cube/Repository/STM32Cube_FW_F1_V1.8.4/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
+
+../Core/Inc/usart.h:
 
 ../Core/Inc/main.h:
 

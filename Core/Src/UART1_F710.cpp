@@ -1,10 +1,10 @@
-
 // SBDBTからUART通信で受け取ったコントローラのデータを格納
 
-#include "main.h"
+#include <cstdint>
+#include "usart.h"
 #include "stm32f1xx_hal_uart.h"
 
-UART_HandleTypeDef huart2;
+using std::uint8_t;
 
 // UART受信時のデータの保存先
 uint8_t RxBuffer[8];
@@ -59,5 +59,5 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	LeftAxisX  = RxBuffer[3];
 	LeftAxisY  = RxBuffer[4];
 
-	HAL_UART_Receive_IT(&huart2, RxBuffer, 8);
+	HAL_UART_Receive_IT(huart, RxBuffer, 8);
 }

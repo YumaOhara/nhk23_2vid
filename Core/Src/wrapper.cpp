@@ -44,13 +44,13 @@ int32_t V4 = 0;
 extern TIM_HandleTypeDef htim1;
 
 void bldc_update(){
-	Vx = (LeftAxisX - 64)*250/64+708;
-	Vy = (64 - LeftAxisY)*250/64+708;
+	Vx = (LeftAxisX - 64)*250/64;
+	Vy = (64 - LeftAxisY)*250/64;
 
-	v1 = (Vx-708) + (Vy-708)+708;
-	v2 = (Vx-708) - (Vy-708)+708;
-	v3 = -((Vx-708) + (Vy-708))+708;
-	v4 = -(Vx-708) + (Vy-708)+708;
+	v1 = Vx + Vy +708;
+	v2 = Vx - Vy +708;
+	v3 = -(Vx + Vy)+708;
+	v4 = -(Vx + Vy) +708;
 
 	V1 = (int32_t)v1;
 	V2 = (int32_t)v2;
